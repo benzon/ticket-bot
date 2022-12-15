@@ -64,7 +64,7 @@ module.exports = class SurveyCommand extends Command {
 			for (const i in responses) {
 				const ticket = await this.client.db.models.Ticket.findOne({ where: { id: responses[i].ticket } });
 				users.add(ticket.creator);
-				const answers = responses[i].answers.map(a => this.client.cryptr.decrypt(a));
+				const answers = responses[i].answers.map(a => a);
 				answers.unshift(ticket.number);
 				responses[i] = answers;
 			}

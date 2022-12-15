@@ -85,7 +85,7 @@ process.on('unhandledRejection', error => {
 });
 
 const DiscordUtils = require('./utils/discord');
-const Cryptr = require('cryptr');
+// const Cryptr = require('cryptr');
 const I18n = require('@eartharoid/i18n');
 const ListenerLoader = require('./modules/listeners/loader');
 const CommandManager = require('./modules/commands/manager');
@@ -139,7 +139,7 @@ class Bot extends Client {
 			 * A [Cryptr](https://www.npmjs.com/package/cryptr) instance
 			 * @type {Cryptr}
 			 */
-			this.cryptr = new Cryptr(process.env.DB_ENCRYPTION_KEY);
+			// this.cryptr = new Cryptr(process.env.DB_ENCRYPTION_KEY);
 
 			const locales = {};
 			fs.readdirSync(path('./src/locales'))

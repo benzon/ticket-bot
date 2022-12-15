@@ -70,7 +70,7 @@ module.exports = class TicketManager extends EventEmitter {
 			guild: guild_id,
 			id: t_channel.id,
 			number,
-			topic: topic.length === 0 ? null : this.client.cryptr.encrypt(topic)
+			topic: topic.length === 0 ? null : topic
 		});
 
 		(async () => {
@@ -78,7 +78,7 @@ module.exports = class TicketManager extends EventEmitter {
 			const i18n = this.client.i18n.getLocale(settings.locale);
 
 			topic = t_row.topic
-				? this.client.cryptr.decrypt(t_row.topic)
+				? t_row.topic
 				: '';
 
 			if (cat_row.image) {
@@ -169,7 +169,7 @@ module.exports = class TicketManager extends EventEmitter {
 
 				collector.on('collect', async message => {
 					topic = message.content;
-					await t_row.update({ topic: this.client.cryptr.encrypt(topic) });
+					await t_row.update({ topic: topic });
 					await t_channel.setTopic(`${creator} | ${topic}`, { reason: 'User updated ticket topic' });
 					await sent.edit(
 						new MessageEmbed()
@@ -242,7 +242,7 @@ module.exports = class TicketManager extends EventEmitter {
 			const pinned = await channel.messages.fetchPinned();
 			await t_row.update({
 				closed_by: closer_id || null,
-				closed_reason: reason ? this.client.cryptr.encrypt(reason) : null,
+				closed_reason: reason ? reason : null,
 				open: false,
 				pinned_messages: [...pinned.keys()]
 			});
@@ -381,7 +381,7 @@ module.exports = class TicketManager extends EventEmitter {
 										]
 									});
 
-									answers = answers.map(a => this.client.cryptr.encrypt(a));
+									answers = answers.map(a => a);
 									await this.client.db.models.SurveyResponse.create({
 										answers,
 										survey: survey.id,

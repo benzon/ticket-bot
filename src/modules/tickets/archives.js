@@ -11,8 +11,8 @@ module.exports = class TicketArchives  {
 		/** The Discord Client */
 		this.client = client;
 
-		this.encrypt = this.client.cryptr.encrypt;
-		this.decrypt = this.client.cryptr.decrypt;
+		// this.encrypt = this.client.cryptr.encrypt;
+		// this.decrypt = this.client.cryptr.decrypt;
 
 	}
 
@@ -28,11 +28,11 @@ module.exports = class TicketArchives  {
 				await this.client.db.models.Message.create({
 					author: message.author.id,
 					createdAt: new Date(message.createdTimestamp),
-					data: this.encrypt(JSON.stringify({
+					data: JSON.stringify({
 						attachments: [...message.attachments.values()],
 						content: message.content,
 						embeds: message.embeds.map(embed => ({ embed }))
-					})),
+					}),
 					id: message.id,
 					ticket: t_row.id
 				} /* { transaction: t } */);
@@ -55,11 +55,11 @@ module.exports = class TicketArchives  {
 			});
 
 			if (m_row) {
-				m_row.data = this.encrypt(JSON.stringify({
+				m_row.data = JSON.stringify({
 					attachments: [...message.attachments.values()],
 					content: message.content,
 					embeds: message.embeds.map(embed => ({ embed }))
-				}));
+				});
 
 				if (message.editedTimestamp) {
 					m_row.edited = true;
@@ -137,9 +137,9 @@ module.exports = class TicketArchives  {
 				avatar: member.user.avatar,
 				bot: member.user.bot,
 				discriminator: member.user.discriminator,
-				display_name: this.encrypt(member.displayName),
+				display_name: member.displayName,
 				role: member.roles.highest.id,
-				username: this.encrypt(member.user.username)
+				username: member.user.username
 			} /* { transaction: t } */);
 
 			return u_row;
@@ -163,7 +163,7 @@ module.exports = class TicketArchives  {
 				/* transaction: t */
 			});
 
-			await c_row.update({ name: this.encrypt(channel.name) } /* { transaction: t } */);
+			await c_row.update({ name: channel.name } /* { transaction: t } */);
 
 			return c_row;
 			// });
@@ -188,7 +188,7 @@ module.exports = class TicketArchives  {
 
 			await r_row.update({
 				colour: role.color === 0 ? '7289DA' : int2hex(role.color), // 7289DA = 7506394
-				name: this.encrypt(role.name)
+				name: role.name
 			} /* { transaction: t } */);
 
 			return r_row;

@@ -48,7 +48,7 @@ module.exports = class TopicCommand extends Command {
 			});
 		}
 
-		await t_row.update({ topic: this.client.cryptr.encrypt(topic) });
+		await t_row.update({ topic: topic });
 
 		const member = await interaction.guild.members.fetch(t_row.creator);
 		interaction.channel.setTopic(`${member} | ${topic}`, { reason: 'User updated ticket topic' });
